@@ -162,7 +162,7 @@ double omp2x,omp2y,qmdt,const3,const4,const5x,const6x,const5y,const6y;
 FILE *fptr, *file_xelec,*fptr2;
 
 struct node *root_elec, *child_elec;
-struct node *root_mag, *child_mag;
+struct node *root_mag, *child_mag,*dev_mag;
 struct node *root_den, *child_den;
 
 double **root_mesh_elec, **child_mesh_elec;
@@ -184,3 +184,14 @@ void free_all();
 struct node *newnode(int m, int n ,int locx, int locy, int level);
 void mem_allocate();
 void read_and_assign();
+int dimGrid, dimBlock;
+double **dev_exs;
+double **dev_eys;
+double dev_dtmds;
+struct node * dev_root_elec,*dev_child_elec,*dev_den;
+double dev_x0,dev_OMEG,dev_newt,dev_inv_c,dev_c_dt,dev_sine,dev_sine1,dev_x,dev_c,dev_c_ds;
+int dev_ny,dev_nx;
+double dev_xxi,dev_ds,dev_ardix,dev_yyj,dev_ardiy,dev_yd0,dev_dinig;  
+double * dev_sgdx0,*dev_sgdy0,*dev_DINI; 
+double dev_z1,dev_z2,dev_inv_nperdt;
+double **dev_ext,**dev_eyt,**dev_ERMSp,**dev_erms2,**dev_temp_rms;
