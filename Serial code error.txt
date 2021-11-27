@@ -1,325 +1,375 @@
-xyfdtd.h(130): error: variable "c_hzi" has already been defined
+static_amr.cu(630): error: argument of type "double" is incompatible with parameter of type "void *"
 
-xyfdtd.h(139): error: variable "c_eys_old" has already been defined
+static_amr.cu(630): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(543): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(631): warning: expression has no effect
 
-static_amr.cu(543): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(638): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(544): warning: expression has no effect
+static_amr.cu(701): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(544): error: too many arguments in function call
+static_amr.cu(701): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(544): error: a host function call cannot be configured
+static_amr.cu(706): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(551): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(706): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(611): error: identifier "dev_KRMS" is undefined
+static_amr.cu(708): warning: expression has no effect
 
-static_amr.cu(614): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(718): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(614): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(719): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(619): error: argument of type "int" is incompatible with parameter of type "const void *"
+static_amr.cu(720): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(621): warning: expression has no effect
+static_amr.cu(725): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(621): error: argument of type "node *" is incompatible with parameter of type "int"
+static_amr.cu(770): error: identifier "parentgrid" is undefined
 
-static_amr.cu(621): error: too many arguments in function call
+static_amr.cu(771): error: identifier "childgrid" is undefined
 
-static_amr.cu(621): error: a host function call cannot be configured
+static_amr.cu(788): error: identifier "panim" is undefined
 
-static_amr.cu(623): error: expected a ";"
+static_amr.cu(869): error: identifier "dev_c_exs" is undefined
 
-static_amr.cu(631): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(632): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(633): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(683): error: identifier "parentgrid" is undefined
-
-static_amr.cu(684): error: identifier "childgrid" is undefined
-
-static_amr.cu(701): error: identifier "panim" is undefined
-
-static_amr.cu(782): error: identifier "dev_c_exs" is undefined
-
-static_amr.cu(783): error: identifier "dev_c_eys" is undefined
-
-static_amr.cu(788): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(788): error: argument of type "double" is incompatible with parameter of type "const void *"
-
-static_amr.cu(789): warning: expression has no effect
-
-static_amr.cu(789): error: too many arguments in function call
-
-static_amr.cu(789): error: a host function call cannot be configured
-
-static_amr.cu(790): error: identifier "dev_child_mag" is undefined
-
-static_amr.cu(796): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(858): error: argument of type "double" is incompatible with parameter of type "void *"
-
-static_amr.cu(858): error: argument of type "double" is incompatible with parameter of type "const void *"
-
-static_amr.cu(861): error: identifier "c_ERMSp" is undefined
-
-static_amr.cu(863): error: argument of type "int" is incompatible with parameter of type "const void *"
-
-static_amr.cu(865): warning: expression has no effect
-
-static_amr.cu(865): error: argument of type "node *" is incompatible with parameter of type "int"
-
-static_amr.cu(865): error: too many arguments in function call
-
-static_amr.cu(865): error: a host function call cannot be configured
-
-static_amr.cu(867): error: expected a ";"
-
-static_amr.cu(874): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(870): error: identifier "dev_c_eys" is undefined
 
 static_amr.cu(875): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(876): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(875): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(890): error: identifier "dev_c_exs" is undefined
+static_amr.cu(876): warning: expression has no effect
 
-static_amr.cu(891): error: identifier "dev_c_eys" is undefined
+static_amr.cu(877): error: identifier "dev_child_mag" is undefined
 
-static_amr.cu(893): error: identifier "dev_child_mag" is undefined
+static_amr.cu(883): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(896): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(945): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(896): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(945): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(897): warning: expression has no effect
+static_amr.cu(948): error: identifier "c_ERMSp" is undefined
 
-static_amr.cu(897): error: too many arguments in function call
+static_amr.cu(950): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(897): error: a host function call cannot be configured
+static_amr.cu(950): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(904): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(952): warning: expression has no effect
 
-static_amr.cu(971): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(961): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(971): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(962): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(974): error: identifier "c_ERMSp" is undefined
+static_amr.cu(963): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(976): error: argument of type "int" is incompatible with parameter of type "const void *"
+static_amr.cu(967): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(978): warning: expression has no effect
+static_amr.cu(977): error: identifier "dev_c_exs" is undefined
 
-static_amr.cu(978): error: argument of type "node *" is incompatible with parameter of type "int"
+static_amr.cu(978): error: identifier "dev_c_eys" is undefined
 
-static_amr.cu(978): error: too many arguments in function call
+static_amr.cu(980): error: identifier "dev_child_mag" is undefined
 
-static_amr.cu(978): error: a host function call cannot be configured
+static_amr.cu(983): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(980): error: expected a ";"
+static_amr.cu(983): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(987): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(984): warning: expression has no effect
 
-static_amr.cu(988): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(991): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(989): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(1058): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(182): warning: variable "f" was declared but never referenced
+static_amr.cu(1058): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(220): warning: variable "iloc4" was set but never used
+static_amr.cu(1061): error: identifier "c_ERMSp" is undefined
 
-static_amr.cu(220): warning: variable "k" was set but never used
+static_amr.cu(1063): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(220): warning: variable "p1" was set but never used
+static_amr.cu(1063): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(221): warning: variable "count_cen" was set but never used
+static_amr.cu(1065): warning: expression has no effect
 
-static_amr.cu(221): warning: variable "countx1" was set but never used
+static_amr.cu(1074): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(221): warning: variable "countx2" was set but never used
+static_amr.cu(1075): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(221): warning: variable "countx3" was set but never used
+static_amr.cu(1076): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(221): warning: variable "n_ini" was declared but never referenced
+static_amr.cu(1080): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(221): warning: variable "countrank" was declared but never referenced
+static_amr.cu(269): warning: variable "f" was declared but never referenced
 
-static_amr.cu(221): warning: variable "count_run" was set but never used
+static_amr.cu(307): warning: variable "iloc4" was set but never used
 
-static_amr.cu(221): warning: variable "count_cen1" was set but never used
+static_amr.cu(307): warning: variable "k" was set but never used
 
-static_amr.cu(222): warning: variable "velx1" was declared but never referenced
+static_amr.cu(307): warning: variable "p1" was set but never used
 
-static_amr.cu(222): warning: variable "velx2" was declared but never referenced
+static_amr.cu(308): warning: variable "count_cen" was set but never used
 
-static_amr.cu(222): warning: variable "velx3" was declared but never referenced
+static_amr.cu(308): warning: variable "countx1" was set but never used
 
-static_amr.cu(222): warning: variable "vely1" was declared but never referenced
+static_amr.cu(308): warning: variable "countx2" was set but never used
 
-static_amr.cu(222): warning: variable "vely2" was declared but never referenced
+static_amr.cu(308): warning: variable "countx3" was set but never used
 
-static_amr.cu(222): warning: variable "vely3" was declared but never referenced
+static_amr.cu(308): warning: variable "n_ini" was declared but never referenced
 
-static_amr.cu(222): warning: variable "tx1" was declared but never referenced
+static_amr.cu(308): warning: variable "countrank" was declared but never referenced
 
-static_amr.cu(222): warning: variable "tx2" was declared but never referenced
+static_amr.cu(308): warning: variable "count_run" was set but never used
 
-static_amr.cu(222): warning: variable "tx3" was declared but never referenced
+static_amr.cu(308): warning: variable "count_cen1" was set but never used
 
-static_amr.cu(222): warning: variable "ty1" was declared but never referenced
+static_amr.cu(309): warning: variable "velx1" was declared but never referenced
 
-static_amr.cu(222): warning: variable "ty2" was declared but never referenced
+static_amr.cu(309): warning: variable "velx2" was declared but never referenced
 
-static_amr.cu(222): warning: variable "ty3" was declared but never referenced
+static_amr.cu(309): warning: variable "velx3" was declared but never referenced
 
-static_amr.cu(222): warning: variable "lambda" was set but never used
+static_amr.cu(309): warning: variable "vely1" was declared but never referenced
 
-static_amr.cu(222): warning: variable "tstart" was set but never used
+static_amr.cu(309): warning: variable "vely2" was declared but never referenced
 
-static_amr.cu(222): warning: variable "t0" was declared but never referenced
+static_amr.cu(309): warning: variable "vely3" was declared but never referenced
 
-static_amr.cu(222): warning: variable "tnew" was set but never used
+static_amr.cu(309): warning: variable "tx1" was declared but never referenced
 
-static_amr.cu(1249): warning: variable "v" was declared but never referenced
+static_amr.cu(309): warning: variable "tx2" was declared but never referenced
 
-static_amr.cu(1284): error: explicit type is missing ("int" assumed)
+static_amr.cu(309): warning: variable "tx3" was declared but never referenced
 
-static_amr.cu(1284): error: a __global__ function must have a void return type
+static_amr.cu(309): warning: variable "ty1" was declared but never referenced
 
-static_amr.cu(1294): warning: missing return statement at end of non-void function "HFIELD(node *, double **, double **, double)"
+static_amr.cu(309): warning: variable "ty2" was declared but never referenced
 
-static_amr.cu(1313): error: explicit type is missing ("int" assumed)
+static_amr.cu(309): warning: variable "ty3" was declared but never referenced
 
-static_amr.cu(1317): error: identifier "m" is undefined
+static_amr.cu(309): warning: variable "lambda" was set but never used
 
-static_amr.cu(1319): error: identifier "z1" is undefined
+static_amr.cu(309): warning: variable "tstart" was set but never used
 
-static_amr.cu(1320): error: identifier "z2" is undefined
+static_amr.cu(309): warning: variable "t0" was declared but never referenced
 
-static_amr.cu(1333): warning: missing return statement at end of non-void function "__global__RMS"
+static_amr.cu(309): warning: variable "tnew" was set but never used
 
-static_amr.cu(1335): error: explicit type is missing ("int" assumed)
+static_amr.cu(1336): warning: variable "v" was declared but never referenced
 
-static_amr.cu(1339): error: identifier "m" is undefined
+static_amr.cu(1646): warning: variable "ie" was declared but never referenced
 
-static_amr.cu(1341): error: identifier "z1" is undefined
+static_amr.cu(1646): warning: variable "ied" was declared but never referenced
 
-static_amr.cu(1342): error: identifier "z2" is undefined
+static_amr.cu(1646): warning: variable "je" was declared but never referenced
 
-static_amr.cu(1354): warning: missing return statement at end of non-void function "__global__child_RMS"
+static_amr.cu(1646): warning: variable "jed" was declared but never referenced
 
-static_amr.cu(1610): warning: variable "ie" was declared but never referenced
+static_amr.cu(1646): warning: variable "iii" was declared but never referenced
 
-static_amr.cu(1610): warning: variable "ied" was declared but never referenced
+static_amr.cu(1647): warning: variable "fioniz" was declared but never referenced
 
-static_amr.cu(1610): warning: variable "je" was declared but never referenced
+static_amr.cu(1648): warning: variable "cf" was set but never used
 
-static_amr.cu(1610): warning: variable "jed" was declared but never referenced
+static_amr.cu(1650): warning: variable "d0" was declared but never referenced
 
-static_amr.cu(1610): warning: variable "iii" was declared but never referenced
+static_amr.cu(1774): warning: variable "ie" was declared but never referenced
 
-static_amr.cu(1611): warning: variable "fioniz" was declared but never referenced
+static_amr.cu(1774): warning: variable "ied" was declared but never referenced
 
-static_amr.cu(1612): warning: variable "cf" was set but never used
+static_amr.cu(1774): warning: variable "je" was declared but never referenced
 
-static_amr.cu(1614): warning: variable "d0" was declared but never referenced
+static_amr.cu(1774): warning: variable "jed" was declared but never referenced
 
-static_amr.cu(1738): warning: variable "ie" was declared but never referenced
+static_amr.cu(1774): warning: variable "iii" was declared but never referenced
 
-static_amr.cu(1738): warning: variable "ied" was declared but never referenced
+static_amr.cu(1775): warning: variable "fioniz" was declared but never referenced
 
-static_amr.cu(1738): warning: variable "je" was declared but never referenced
+static_amr.cu(1776): warning: variable "cf" was set but never used
 
-static_amr.cu(1738): warning: variable "jed" was declared but never referenced
+static_amr.cu(1778): warning: variable "d0" was declared but never referenced
 
-static_amr.cu(1738): warning: variable "iii" was declared but never referenced
+static_amr.cu(2166): error: identifier "panim" is undefined
 
-static_amr.cu(1739): warning: variable "fioniz" was declared but never referenced
+static_amr.cu(2167): error: identifier "panimE" is undefined
 
-static_amr.cu(1740): warning: variable "cf" was set but never used
+static_amr.cu(2168): error: identifier "canim" is undefined
 
-static_amr.cu(1742): warning: variable "d0" was declared but never referenced
+static_amr.cu(2169): error: identifier "canimE" is undefined
 
-static_amr.cu(2130): error: identifier "panim" is undefined
+static_amr.cu(1904): warning: variable "k" was declared but never referenced
 
-static_amr.cu(2131): error: identifier "panimE" is undefined
+static_amr.cu(1907): warning: variable "c_dinig" was declared but never referenced
 
-static_amr.cu(2132): error: identifier "canim" is undefined
+static_amr.cu(2357): error: identifier "dev_E0" is undefined
 
-static_amr.cu(2133): error: identifier "canimE" is undefined
+static_amr.cu(2358): error: identifier "dev_elec" is undefined
 
-static_amr.cu(1868): warning: variable "k" was declared but never referenced
+static_amr.cu(2359): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(1871): warning: variable "c_dinig" was declared but never referenced
+static_amr.cu(2360): warning: expression has no effect
 
-static_amr.cu(2321): error: identifier "dev_E0" is undefined
+static_amr.cu(2371): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2322): error: identifier "dev_elec" is undefined
+static_amr.cu(2372): warning: expression has no effect
 
-static_amr.cu(2323): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2460): error: identifier "dev_K" is undefined
 
-static_amr.cu(2324): warning: expression has no effect
+static_amr.cu(2463): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(2324): error: identifier "setup_init" is undefined
+static_amr.cu(2463): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2335): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2464): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(2336): warning: expression has no effect
+static_amr.cu(2464): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2426): error: argument of type "int" is incompatible with parameter of type "void *"
+static_amr.cu(2465): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2426): error: argument of type "int" is incompatible with parameter of type "const void *"
+static_amr.cu(2465): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2427): error: argument of type "int" is incompatible with parameter of type "void *"
+static_amr.cu(2466): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2427): error: argument of type "int" is incompatible with parameter of type "const void *"
+static_amr.cu(2466): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2428): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2467): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2428): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2467): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2429): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2468): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2429): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2468): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2430): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2469): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2430): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2469): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2431): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2470): error: identifier "dev_xd0" is undefined
 
-static_amr.cu(2431): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2470): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2432): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2471): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2432): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2471): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2433): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2472): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2433): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2472): error: argument of type "double" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2434): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2476): error: argument of type "int" is incompatible with parameter of type "const void *"
 
-static_amr.cu(2434): error: argument of type "double" is incompatible with parameter of type "const void *"
+static_amr.cu(2479): warning: expression has no effect
 
-static_amr.cu(2439): warning: expression has no effect
+static_amr.cu(2485): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(2439): error: identifier "setup_init1" is undefined
+static_amr.cu(2486): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(2445): error: argument of type "int" is incompatible with parameter of type "void *"
+static_amr.cu(2487): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2446): error: argument of type "int" is incompatible with parameter of type "void *"
+static_amr.cu(2488): error: argument of type "double" is incompatible with parameter of type "void *"
 
-static_amr.cu(2447): error: argument of type "double" is incompatible with parameter of type "void *"
+static_amr.cu(2489): error: argument of type "double" is incompatible with parameter of type "void *"
 
-Error limit reached.
-100 errors detected in the compilation of "/tmp/tmpxft_00004d6c_00000000-6_static_amr.cpp1.ii".
-Compilation terminated.
-make: *** [static_amr.o] Error 1
-[202111020@gicshpc2 Maxellerators-main]$ gedit static_amr.cu
+static_amr.cu(2490): error: argument of type "double" is incompatible with parameter of type "void *"
 
-(gedit:19860): GtkSourceView-WARNING **: 18:00:45.626: in file /usr/share/gtksou                                                                                                                         rceview-3.0/language-specs/cuda.lang: style 'latex:display-math' not defined
+static_amr.cu(2491): error: argument of type "double" is incompatible with parameter of type "void *"
+
+static_amr.cu(2493): error: argument of type "double" is incompatible with parameter of type "void *"
+
+static_amr.cu(2494): error: argument of type "double" is incompatible with parameter of type "void *"
+
+static_amr.cu(2532): error: identifier "panim" is undefined
+
+static_amr.cu(2533): error: identifier "panimE" is undefined
+
+static_amr.cu(2534): error: identifier "canim" is undefined
+
+static_amr.cu(2535): error: identifier "canimE" is undefined
+
+static_amr.cu(2177): warning: variable "k" was declared but never referenced
+
+static_amr.cu(2177): warning: variable "contr" was declared but never referenced
+
+static_amr.cu(2177): warning: variable "contr2" was declared but never referenced
+
+static_amr.cu(2180): warning: variable "c_ardiy" was declared but never referenced
+
+static_amr.cu(2180): warning: variable "c_ardix" was declared but never referenced
+
+static_amr.cu(2180): warning: variable "c_dinig" was declared but never referenced
+
+static_amr.cu(2181): warning: variable "c_xd0" was set but never used
+
+static_amr.cu(2181): warning: variable "c_yd0" was set but never used
+
+static_amr.cu(2181): warning: variable "c_xxi" was declared but never referenced
+
+static_amr.cu(2181): warning: variable "c_yyj" was declared but never referenced
+
+static_amr.cu(2783): warning: variable "lx" was declared but never referenced
+
+static_amr.cu(2783): warning: variable "ly" was declared but never referenced
+
+static_amr.cu(2879): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(2879): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(3106): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(3106): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(3107): warning: variable "fac" was declared but never referenced
+
+static_amr.cu(3097): warning: variable "l" was declared but never referenced
+
+static_amr.cu(3097): warning: variable "g" was declared but never referenced
+
+static_amr.cu(3312): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(3312): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(3303): warning: variable "l" was declared but never referenced
+
+static_amr.cu(3303): warning: variable "g" was declared but never referenced
+
+static_amr.cu(3560): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(3560): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(3552): warning: variable "l" was declared but never referenced
+
+static_amr.cu(3552): warning: variable "g" was declared but never referenced
+
+static_amr.cu(3815): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(3815): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(4022): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(4022): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(4232): warning: variable "ita" was declared but never referenced
+
+static_amr.cu(4232): warning: variable "ep" was declared but never referenced
+
+static_amr.cu(4373): warning: variable "fpr" was declared but never referenced
+
+static_amr.cu(4374): warning: variable "l" was declared but never referenced
+
+static_amr.cu(4375): warning: variable "ic" was declared but never referenced
+
+static_amr.cu(4375): warning: variable "jc" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cm1" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cn1" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cm2" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cn2" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cm3" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cn3" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cm4" was declared but never referenced
+
+static_amr.cu(4376): warning: variable "cn4" was declared but never referenced
