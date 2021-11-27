@@ -127,7 +127,7 @@ double **c_eyold;
 double **c_vxold;
 double **c_vyold;
 double **c_hzold;
-double **c_hzi;
+//double **c_hzi;
 double **c_frq;
 int *c_done;
 int *c_imid;
@@ -136,7 +136,7 @@ int *c_jmid;
 //New Added
 
 double **ERMSp;
-double **c_eys_old;
+//double **c_eys_old;
 int c_startx;
 int c_starty;
 int c_endx;
@@ -195,3 +195,4 @@ double dev_xxi,dev_ds,dev_ardix,dev_yyj,dev_ardiy,dev_yd0,dev_dinig;
 double * dev_sgdx0,*dev_sgdy0,*dev_DINI; 
 double dev_z1,dev_z2,dev_inv_nperdt;
 double **dev_ext,**dev_eyt,**dev_ERMSp,**dev_erms2,**dev_temp_rms;
+int dev_KRMS;
