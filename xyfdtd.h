@@ -1,3 +1,4 @@
+#include<cuda.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -191,8 +192,8 @@ double dev_dtmds;
 struct node * dev_root_elec,*dev_child_elec,*dev_den;
 double dev_x0,dev_OMEG,dev_newt,dev_inv_c,dev_c_dt,dev_sine,dev_sine1,dev_x,dev_c,dev_c_ds;
 int dev_ny,dev_nx;
-double dev_xxi,dev_ds,dev_ardix,dev_yyj,dev_ardiy,dev_yd0,dev_dinig;  
+double dev_xxi,dev_ds,dev_ardix,dev_yyj,dev_ardiy,dev_xd0,dev_yd0,dev_dinig;  
 double * dev_sgdx0,*dev_sgdy0,*dev_DINI; 
-double dev_z1,dev_z2,dev_inv_nperdt;
-double **dev_ext,**dev_eyt,**dev_ERMSp,**dev_erms2,**dev_temp_rms;
-int dev_KRMS;
+double dev_z1,dev_z2,dev_inv_nperdt,dev_E0;
+double **dev_ext,**dev_eyt,**dev_ERMSp,**dev_erms2,**dev_temp_rms,**dev_c_exs,**dev_c_eys;
+int *dev_KRMS,*dev_K;

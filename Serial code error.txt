@@ -24,7 +24,7 @@ static_amr.cu(720): error: argument of type "double" is incompatible with parame
 
 static_amr.cu(725): error: argument of type "int" is incompatible with parameter of type "void *"
 
-static_amr.cu(770): error: identifier "parentgrid" is undefined
+static_amr.cu(770): error: identifier "parentgrid" is undefined compilation problem
 
 static_amr.cu(771): error: identifier "childgrid" is undefined
 
