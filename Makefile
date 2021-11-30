@@ -7,8 +7,8 @@ clean:
 static_amr: xyfdtd.o static_amr.o 
 	gcc -o static_amr xyfdtd.o static_amr.o -lm
 
-static_amr.o: static_amr.c
-	gcc -c static_amr.c
+static_amr.o: static_amr.cu
+	nvcc -c static_amr.cu
 
 xyfdtd.o: xyfdtd.c
 	gcc -c xyfdtd.c
