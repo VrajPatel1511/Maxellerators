@@ -71,7 +71,7 @@ double t1, t_efield_hfield,t_elec_dens,t_anim,t_rms,t_zero,t_vel_x,t_vel_y;
 //! declare all the file pointers used/to be used in the code  
 FILE *fptr3,*fx1,*fx2,*fx3,*fy1,*fy2,*fy3,*fxt,*frefine,*canitimxy,*velp1,*velp2,*velp3;
 
-__global__ void HFIELD(struct node * grid,double ** exs,double ** eys, double dtmds)
+__global__ void HFIELD(struct node * grid,double ** exs,double ** eys, double *dtmds)
 {
   int i = blockIdx.x*blockDim.x+threadIdx.x;
  int j = blockIdx.y*blockDim.y+threadIdx.y;
@@ -79,11 +79,11 @@ __global__ void HFIELD(struct node * grid,double ** exs,double ** eys, double dt
    
     if ( i < grid->m && j<grid->n )
     {
-        grid->mesh[i][j]+= (-(eys[i+1][j]-eys[i][j])+(exs[i][j+1]-exs[i][j]))*dtmds;
+        grid->mesh[i][j]+= (-(eys[i+1][j]-eys[i][j])+(exs[i][j+1]-exs[i][j]))*(*dtmds);
     }
 }
 
-__global__ void RMS(struct node * root_elec,double z1,double z2,double inv_nperdt,double **ext,double **eyt,double **ERMSp,double **erms2,int *k)
+__global__ void RMS(struct node * root_elec,double z1,double z2,double *inv_nperdt,double **ext,double **eyt,double **ERMSp,double **erms2,int *k)
 {
     int i = blockIdx.x*blockDim.x+threadIdx.x;
     int j = blockIdx.y*blockDim.y+threadIdx.y;
@@ -92,7 +92,7 @@ __global__ void RMS(struct node * root_elec,double z1,double z2,double inv_nperd
         z1=(ext[i][j]*ext[i][j]+ext[i-1][j]*ext[i-1][j])*.5f;   //! avg of the two scattered field is required (E_eff) for the density update
         z2=(eyt[i][j]*eyt[i][j]+eyt[i][j-1]*eyt[i][j-1])*.5f;   //! avg of the two scattered field is required (E_eff) for the density update
         ERMSp[i][j] = erms2[i][j];
-        erms2[i][j]=erms2[i][j]+(z1+z2)*inv_nperdt;     //! time updates and averages (parent)
+        erms2[i][j]=erms2[i][j]+(z1+z2)*(*inv_nperdt);     //! time updates and averages (parent)
         if(*k==2)
         {
             if (erms2[i][j]<0)
@@ -105,7 +105,7 @@ __global__ void RMS(struct node * root_elec,double z1,double z2,double inv_nperd
     }
 }
 
-__global__ void child_RMS(struct node * root_elec,double z1,double z2,double inv_nperdt,double **ext,double **eyt,double **erms2,int *k)
+__global__ void child_RMS(struct node * root_elec,double z1,double z2,double *inv_nperdt,double **ext,double **eyt,double **erms2,int *k)
 {
     int i = blockIdx.x*blockDim.x+threadIdx.x;
     int j = blockIdx.y*blockDim.y+threadIdx.y;
@@ -113,7 +113,7 @@ __global__ void child_RMS(struct node * root_elec,double z1,double z2,double inv
     {
         z1=(ext[i][j]*ext[i][j]+ext[i-1][j]*ext[i-1][j])*.5f;   //! avg of the two scattered field is required (E_eff) for the density update
         z2=(eyt[i][j]*eyt[i][j]+eyt[i][j-1]*eyt[i][j-1])*.5f;   //! avg of the two scattered field is required (E_eff) for the density update
-        erms2[i][j]=erms2[i][j]+(z1+z2)*inv_nperdt;     //! time updates and averages (parent)
+        erms2[i][j]=erms2[i][j]+(z1+z2)*(*inv_nperdt);     //! time updates and averages (parent)
         if(*k==2)
         {
             if (erms2[i][j]<0)
@@ -126,36 +126,36 @@ __global__ void child_RMS(struct node * root_elec,double z1,double z2,double inv
     }
 }
 
-__global__ void setup_init(struct node *dev_root_elec,struct node * dev_den,double E0)
+__global__ void setup_init(struct node *dev_root_elec,struct node * dev_den,double *E0)
 {
     int i = threadIdx.x + blockIdx.x * blockDim.x; 
     int j = threadIdx.y + blockIdx.y * blockDim.y; 
     if(i<dev_root_elec->m && j>dev_root_elec->n)
     {
         dev_den->mesh[i][j] = 0.0;
-  		dev_root_elec->mesh[i][j] = E0/sqrt(2.0);
+  		dev_root_elec->mesh[i][j] = (*E0)/sqrt(2.0);
     }
 }
 
-__global__ void setup_init1(struct node * root_den,int ny,int nx,double xxi,double ds,double ardix,double yyj,double ardiy,double xd0,double yd0,double dinig,double * sgdx0,double *sgdy0,double *DINI, int *K)
+__global__ void setup_init1(struct node * root_den,int *ny,int *nx,double *xxi,double *ds,double *ardix,double *yyj,double *ardiy,double *xd0,double *yd0,double *dinig,double * sgdx0,double *sgdy0,double *DINI, int *K)
 {
     int i = threadIdx.x + blockIdx.x * blockDim.x; 
     int j = threadIdx.y + blockIdx.y * blockDim.y; 
-    if(i<nx && j<ny)
+    if(i<*nx && j<*ny)
     {
-        xxi=ds*i;
-	    ardix=0.0;
+        *xxi=(*ds)*i;
+	    *ardix=0.0;
 	    if(sgdx0[1]>0)
-	        ardix=(-pow((xxi-xd0),2))/2.0/sgdx0[1]/sgdx0[1];
-        yyj=ds*j;
-        ardiy=0.0;
+	        *ardix=(-pow(((*xxi)-(*xd0)),2))/2.0/sgdx0[1]/sgdx0[1];
+        *yyj=(*ds)*j;
+        *ardiy=0.0;
         if(sgdy0[1]>0) 
-            ardiy=-pow((yyj-yd0),2)/2.0/sgdy0[K]/sgdy0[*K];
-            dinig=DINI[K]*exp(ardix+ardiy);
-            if(dinig<=1.0e13)
-                dinig=0;
+            *ardiy=-pow((*(yyj)-(*yd0)),2)/2.0/sgdy0[*K]/sgdy0[*K];
+            *dinig=DINI[*K]*exp((*ardix)+(*ardiy));
+            if(*dinig<=1.0e13)
+                *dinig=0;
                  
-        root_den->mesh[i][j] = root_den->mesh[i][j]+ dinig;
+        root_den->mesh[i][j] = root_den->mesh[i][j]+ (*dinig);
     }
 }
 
@@ -625,7 +625,7 @@ int main()
         cudaMemcpy(dev_mag, root_mag, sizeof(root_mag), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_exs, exs, sizeof(exs), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_eys, eys, sizeof(eys), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_dtmds, dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_dtmds, &dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
         HFIELD<<<(ceil(root_mag->m/32),ceil(root_mag->n/32)),(32,32)>>>(dev_mag,dev_exs,dev_eys,dev_dtmds);
         cudaMemcpy(root_mag, dev_mag, sizeof(root_mag), cudaMemcpyDeviceToHost);
         cudaMemcpy(hzi, dev_mag->mesh, sizeof(root_mag), cudaMemcpyDeviceToHost);
@@ -696,7 +696,7 @@ int main()
         cudaMalloc((void**)&dev_KRMS, sizeof(KRMS));
 
         cudaMemcpy(dev_root_elec, root_elec, sizeof(root_elec), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_inv_nperdt, inv_nperdt, sizeof(inv_nperdt), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_inv_nperdt, &inv_nperdt, sizeof(inv_nperdt), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_ext, ext, sizeof(ext), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_eyt, eyt, sizeof(eyt), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_ERMSp, ERMSp, sizeof(ERMSp), cudaMemcpyHostToDevice);
@@ -870,7 +870,7 @@ int main()
             cudaMemcpy(dev_mag, child_mag, sizeof(child_mag), cudaMemcpyHostToDevice);
             cudaMemcpy(dev_exs, c_exs, sizeof(c_exs), cudaMemcpyHostToDevice);
             cudaMemcpy(dev_eys, c_eys, sizeof(c_eys), cudaMemcpyHostToDevice);
-            cudaMemcpy(dev_dtmds, dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
+            cudaMemcpy(dev_dtmds, &dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
             HFIELD<<<(ceil(child_mag->m/32),ceil(child_mag->n/32)),(32,32)>>>(dev_mag,dev_exs,dev_eys,dev_dtmds);
             cudaMemcpy(child_mag, dev_mag, sizeof(child_mag), cudaMemcpyDeviceToHost);
             cudaMemcpy(c_hzi, dev_child_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
@@ -940,7 +940,7 @@ int main()
         cudaMalloc((void**)&dev_KRMS, sizeof(KRMS));
 
         cudaMemcpy(dev_child_elec, child_elec, sizeof(child_elec), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_inv_nperdt, c_inv_nperdt, sizeof(c_inv_nperdt), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_inv_nperdt, &c_inv_nperdt, sizeof(c_inv_nperdt), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_ext, c_ext, sizeof(c_ext), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_eyt, c_eyt, sizeof(c_eyt), cudaMemcpyHostToDevice);
         //cudaMemcpy(dev_ERMSp, c_ERMSp, sizeof(c_ERMSp), cudaMemcpyHostToDevice);
@@ -978,7 +978,7 @@ int main()
         cudaMemcpy(dev_mag, child_mag, sizeof(child_mag), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_c_exs, c_exs, sizeof(c_exs), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_c_eys, c_eys, sizeof(c_eys), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_dtmds, dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_dtmds, &dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
         HFIELD<<<(ceil(child_mag->m/32),ceil(child_mag->n/32)),(32,32)>>>(dev_mag,dev_c_exs,dev_c_eys,dev_dtmds);
         cudaMemcpy(child_mag, dev_child_mag, sizeof(child_mag), cudaMemcpyDeviceToHost);
         cudaMemcpy(c_hzi, dev_child_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
@@ -1053,7 +1053,7 @@ int main()
         cudaMalloc((void**)&dev_KRMS, sizeof(KRMS));
 
         cudaMemcpy(dev_child_elec, child_elec, sizeof(child_elec), cudaMemcpyHostToDevice);
-        cudaMemcpy(dev_inv_nperdt, c_inv_nperdt, sizeof(c_inv_nperdt), cudaMemcpyHostToDevice);
+        cudaMemcpy(dev_inv_nperdt, &c_inv_nperdt, sizeof(c_inv_nperdt), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_ext, c_ext, sizeof(c_ext), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_eyt, c_eyt, sizeof(c_eyt), cudaMemcpyHostToDevice);
         //cudaMemcpy(dev_ERMSp, c_ERMSp, sizeof(c_ERMSp), cudaMemcpyHostToDevice);
@@ -2354,7 +2354,7 @@ void SETUP2()
       cudaMalloc((void**)&dev_den, sizeof(root_den));
       cudaMalloc((void**)&dev_E0, sizeof(double));
       cudaMemcpy(dev_root_elec, root_elec, sizeof(root_elec), cudaMemcpyHostToDevice);
-      cudaMemcpy(dev_E0, E0, sizeof(double), cudaMemcpyHostToDevice);
+      cudaMemcpy(dev_E0, &E0, sizeof(double), cudaMemcpyHostToDevice);
       setup_init<<<(ceil(root_elec->m/32),ceil(root_elec->n/32)),(32,32)>>>(dev_root_elec,dev_den,dev_E0);    
     cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
     cudaMemcpy(root_elec, dev_root_elec, sizeof(dev_den), cudaMemcpyDeviceToHost);
@@ -2366,7 +2366,7 @@ void SETUP2()
       cudaMalloc((void**)&dev_den, sizeof(child_den));
       cudaMalloc((void**)&dev_E0, sizeof(double));
       cudaMemcpy(dev_root_elec, child_elec, sizeof(child_elec), cudaMemcpyHostToDevice);
-      cudaMemcpy(dev_E0, E0, sizeof(double), cudaMemcpyHostToDevice);
+      cudaMemcpy(dev_E0, &E0, sizeof(double), cudaMemcpyHostToDevice);
       setup_init<<<(ceil(child_elec->m/32),ceil(child_elec->n/32)),(32,32)>>>(dev_root_elec,dev_den,dev_E0);    
     cudaMemcpy(child_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
     cudaMemcpy(child_elec, dev_root_elec, sizeof(dev_den), cudaMemcpyDeviceToHost);
@@ -2458,16 +2458,16 @@ void SETUP2()
         cudaMalloc((void**)&dev_K, sizeof(K));
 
         cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_ny, ny, sizeof(ny), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_nx, nx, sizeof(nx), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_xxi, xxi, sizeof(xxi), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_ds, ds, sizeof(ds), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_ardix, ardix, sizeof(ardix), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_yyj, yyj, sizeof(yyj), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_ardiy, ardiy, sizeof(ardiy), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_xd0, xd0, sizeof(xd0), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_yd0, yd0, sizeof(yd0), cudaMemcpyDeviceToHost);
-        cudaMemcpy(dev_dinig, dinig, sizeof(dinig), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ny, &ny, sizeof(ny), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_nx, &nx, sizeof(nx), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_xxi, &xxi, sizeof(xxi), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ds, &ds, sizeof(ds), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ardix, &ardix, sizeof(ardix), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_yyj, &yyj, sizeof(yyj), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ardiy, &ardiy, sizeof(ardiy), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_xd0, &xd0, sizeof(xd0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_yd0, &yd0, sizeof(yd0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_dinig, &dinig, sizeof(dinig), cudaMemcpyDeviceToHost);
         cudaMemcpy(dev_sgdx0, sgdx0, sizeof(sgdx0), cudaMemcpyDeviceToHost);
         cudaMemcpy(dev_sgdy0, sgdy0, sizeof(sgdy0), cudaMemcpyDeviceToHost);
         cudaMemcpy(dev_DINI, DINI, sizeof(DINI), cudaMemcpyDeviceToHost);
