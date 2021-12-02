@@ -1,10 +1,11 @@
 #include "xyfdtd.h"
 
 
-int tag=1;
-double c=2.99795e8,pi=3.14159265,eps0=8.854e-12,xmu0=1.55063706e-6,qe=1.602176487e-19,cmasse=9.10938215e-31,akb=1.3806503e-23;
-double radius=0;
-int rank =0, sizar=3000;
+// int tag=1;
+// double c=2.99795e8,pi=3.14159265,eps0=8.854e-12,xmu0=1.55063706e-6,qe=1.602176487e-19,cmasse=9.10938215e-31,akb=1.3806503e-23;
+// double radius=0;
+// int rank =0;
+ int sizar=3000;
 struct node *newnode(int m, int n ,int locx, int locy, int level)
 {
 	struct node *temp = (struct node*)malloc(sizeof(struct node));
