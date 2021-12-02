@@ -15,6 +15,7 @@
 
 
 #include "xyfdtd.h"
+void panim();
 void SETUP(); //! has been commented in the code 
 //Not used
 void SETUP2();  //! currently Activated: defines the initial E-fields, the Gaussian plasma density. 
@@ -765,8 +766,8 @@ int main()
             //!=============================================================XXX
             KELEC=KELEC+1;
            if(n==1){
-           parentgrid();
-                childgrid();   
+           //parentgrid();
+             //   childgrid();   
            }
           
             
@@ -2162,9 +2163,9 @@ void SETUP()
     c_c1 = (c*c_dt-c_ds)/(c*c_dt+c_ds);
     
            panim();
-           panimE();
-           canim();
-		       canimE();
+          //  panimE();
+          //  canim();
+		      //  canimE();
     
     
 }
@@ -2528,9 +2529,9 @@ void SETUP2()
       
            printf("Entered here \n");
            panim();
-           panimE();
-           canim();
-		       canimE(); 
+          //  panimE();
+          //  canim();
+		      //  canimE(); 
  
   }
  if(n>0){  
@@ -4463,6 +4464,34 @@ void c2p()
     gettimeofday(&end,NULL);
     t_cal_c2p += ((end.tv_sec - begin.tv_sec) + ((end.tv_usec - begin.tv_usec)/1000000.0));
 
+}
+void panim()
+{
+    //printf("In anim\n");
+	double e_total;
+	char fil[50];
+	char* buffer = (char *)malloc(sizeof(int));
+	snprintf(buffer, sizeof(buffer) - 1, "%d", ansetup2);
+	strcpy(fil,"panim/");
+	strcat(fil, buffer);
+	strcat(fil,".dat");
+
+	file_xelec=fopen(fil,"w");
+	
+	for(j=0; j<root_den->n; j++)
+	{
+		for(i=0; i<root_den->m; i++)
+		{
+			fprintf(file_xelec,"%e ",(root_den->mesh[i][j]));
+			if (root_den->mesh[i][j]!=0)
+			{
+				// printf("%.18f\n",child_den->mesh[i][j]);
+			}
+		}
+		fprintf(file_xelec,"\n");
+	}
+	
+	fclose(file_xelec);
 }
 
 
