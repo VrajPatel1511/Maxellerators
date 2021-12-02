@@ -1,5 +1,5 @@
 #include "xyfdtd.h"
-#include <cuda.h>
+
 
 int tag=1;
 double c=2.99795e8,pi=3.14159265,eps0=8.854e-12,xmu0=1.55063706e-6,qe=1.602176487e-19,cmasse=9.10938215e-31,akb=1.3806503e-23;
@@ -25,16 +25,16 @@ void mem_allocate()
 	// 	}
 	// }
 
-	ERMSp = (double *)malloc(sizeof(double *) * sizar);
+	ERMSp = (double **)malloc(sizeof(double *) * sizar);
 	if (ERMSp){
 		for (i = 0; i < sizar; i++){
-			ERMSp[i] = malloc(sizeof(double) * sizar);
+			ERMSp[i] = (double*)malloc(sizeof(double) * sizar);
 		}
 	}
-	erms2 = malloc(sizeof(double *) * sizar);
+	erms2 = (double **)malloc(sizeof(double *) * sizar);
 	if (erms2){
 		for (i = 0; i < sizar; i++){
-			erms2[i] = malloc(sizeof(double) * sizar);
+			erms2[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 	// den = malloc(sizeof(double *) * sizar);
@@ -44,198 +44,198 @@ void mem_allocate()
 	// 	}
 	// }
 	
-	exi = malloc(sizeof(double *) * sizar);
+	exi = (double **)malloc(sizeof(double *) * sizar);
 	if (exi){
 		for (i = 0; i < sizar; i++){
-			exi[i] = malloc(sizeof(double) * sizar);
+			exi[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eyi = malloc(sizeof(double *) * sizar);
+	eyi = (double **)malloc(sizeof(double *) * sizar);
 	if (eyi){
 		for (i = 0; i < sizar; i++){
-			eyi[i] = malloc(sizeof(double) * sizar);
+			eyi[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	exi1 = malloc(sizeof(double *) * sizar);
+	exi1 = (double **)malloc(sizeof(double *) * sizar);
 	if (exi1){
 		for (i = 0; i < sizar; i++){
-			exi1[i] = malloc(sizeof(double) * sizar);
+			exi1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eyi1 = malloc(sizeof(double *) * sizar);
+	eyi1 = (double **)malloc(sizeof(double *) * sizar);
 	if (eyi1){
 		for (i = 0; i < sizar; i++){
-			eyi1[i] = malloc(sizeof(double) * sizar);
+			eyi1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	exs = malloc(sizeof(double *) * sizar);
+	exs = (double **)malloc(sizeof(double *) * sizar);
 	if (exs){
 		for (i = 0; i < sizar; i++){
-			exs[i] = malloc(sizeof(double) * sizar);
+			exs[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eys = malloc(sizeof(double *) * sizar);
+	eys = (double **)malloc(sizeof(double *) * sizar);
 	if (eys){
 		for (i = 0; i < sizar; i++){
-			eys[i] = malloc(sizeof(double) * sizar);
+			eys[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	hzi = malloc(sizeof(double *) * sizar);
+	hzi = (double **)malloc(sizeof(double *) * sizar);
 	if (hzi){
 		for (i = 0; i < sizar; i++){
-			hzi[i] = malloc(sizeof(double) * sizar);
+			hzi[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	vx = malloc(sizeof(double *) * sizar);
+	vx = (double **)malloc(sizeof(double *) * sizar);
 	if (vx){
 		for (i = 0; i < sizar; i++){
-			vx[i] = malloc(sizeof(double) * sizar);
+			vx[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	vy = malloc(sizeof(double *) * sizar);
+	vy = (double **)malloc(sizeof(double *) * sizar);
 	if (vy){
 		for (i = 0; i < sizar; i++){
-			vy[i] = malloc(sizeof(double) * sizar);
+			vy[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	ext = malloc(sizeof(double *) * sizar);
+	ext = (double **)malloc(sizeof(double *) * sizar);
 	if (ext){
 		for (i = 0; i < sizar; i++){
-			ext[i] = malloc(sizeof(double) * sizar);
+			ext[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eyt = malloc(sizeof(double *) * sizar);
+	eyt = (double **)malloc(sizeof(double *) * sizar);
 	if (eyt){
 		for (i = 0; i < sizar; i++){
-			eyt[i] = malloc(sizeof(double) * sizar);
+			eyt[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	exs1 = malloc(sizeof(double *) * sizar);
+	exs1 = (double **)malloc(sizeof(double *) * sizar);
 	if (exs1){
 		for (i = 0; i < sizar; i++){
-			exs1[i] = malloc(sizeof(double) * sizar);
+			exs1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eys1 = malloc(sizeof(double *) * sizar);
+	eys1 = (double **)malloc(sizeof(double *) * sizar);
 	if (eys1){
 		for (i = 0; i < sizar; i++){
-			eys1[i] = malloc(sizeof(double) * sizar);
+			eys1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	xmid = malloc(sizeof(double) * sizar);
-	ymid = malloc(sizeof(double) * sizar);
-	sgdx0 = malloc(sizeof(double) * sizar);
-	sgdy0 = malloc(sizeof(double) * sizar);
-	DINI = malloc(sizeof(double) * sizar);
-	DIFFUSION = malloc(sizeof(double *) * sizar);
+	xmid = (double *)malloc(sizeof(double) * sizar);
+	ymid = (double *)malloc(sizeof(double) * sizar);
+	sgdx0 = (double *)malloc(sizeof(double) * sizar);
+	sgdy0 = (double *)malloc(sizeof(double) * sizar);
+	DINI = (double *)malloc(sizeof(double) * sizar);
+	DIFFUSION = (double **)malloc(sizeof(double *) * sizar);
 	if (DIFFUSION){
 		for (i = 0; i < sizar; i++){
-			DIFFUSION[i] = malloc(sizeof(double) * sizar);
+			DIFFUSION[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	frqio = malloc(sizeof(double *) * sizar);
+	frqio = (double **)malloc(sizeof(double *) * sizar);
 	if (frqio){
 		for (i = 0; i < sizar; i++){
-			frqio[i] = malloc(sizeof(double) * sizar);
+			frqio[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	denp = malloc(sizeof(double *) * sizar);
+	denp = (double **)malloc(sizeof(double *) * sizar);
 	if (denp){
 		for (i = 0; i < sizar; i++){
-			denp[i] = malloc(sizeof(double) * sizar);
+			denp[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 	
-	imid = malloc(sizeof(int) * sizar);
-	jmid = malloc(sizeof(int) * sizar);
+	imid = (int*)malloc(sizeof(int) * sizar);
+	jmid = (int*)malloc(sizeof(int) * sizar);
 
-	exs_old = malloc(sizeof(double *) * sizar);
+	exs_old = (double **)malloc(sizeof(double *) * sizar);
 	if (exs_old){
 		for (i = 0; i < sizar; i++){
-			exs_old[i] = malloc(sizeof(double) * sizar);
+			exs_old[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	eys_old = malloc(sizeof(double *) * sizar);
+	eys_old = (double **)malloc(sizeof(double *) * sizar);
 	if (eys_old){
 		for (i = 0; i < sizar; i++){
-			eys_old[i] = malloc(sizeof(double) * sizar);
+			eys_old[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	vx_old = malloc(sizeof(double *) * sizar);
+	vx_old = (double **)malloc(sizeof(double *) * sizar);
 	if (vx_old){
 		for (i = 0; i < sizar; i++){
-			vx_old[i] = malloc(sizeof(double) * sizar);
+			vx_old[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	vy_old = malloc(sizeof(double *) * sizar);
+	vy_old = (double **)malloc(sizeof(double *) * sizar);
 	if (vy_old){
 		for (i = 0; i < sizar; i++){
-			vy_old[i] = malloc(sizeof(double) * sizar);
+			vy_old[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 
-	root_mesh_elec = malloc(sizeof(double)*sizar);
-	child_mesh_elec = malloc(sizeof(double)*sizar);
+	root_mesh_elec = (double **)malloc(sizeof(double)*sizar);
+	child_mesh_elec = (double **)malloc(sizeof(double)*sizar);
 	if(root_mesh_elec && child_mesh_elec)
 	{
 		for (i = 0; i < sizar; ++i)
 		{
-			root_mesh_elec[i] = calloc(sizar, sizeof(double));
-			child_mesh_elec[i] = calloc(sizar, sizeof(double));	
+			root_mesh_elec[i] = (double *)calloc(sizar, sizeof(double));
+			child_mesh_elec[i] = (double *)calloc(sizar, sizeof(double));	
 		}
 	}
 
-	root_mesh_mag = malloc(sizeof(double)*sizar);
-	child_mesh_mag = malloc(sizeof(double)*sizar);
+	root_mesh_mag = (double **)malloc(sizeof(double)*sizar);
+	child_mesh_mag = (double **)malloc(sizeof(double)*sizar);
 	if(root_mesh_mag && child_mesh_mag)
 	{
 		for (i = 0; i < sizar; ++i)
 		{
-			root_mesh_mag[i] = calloc(sizar, sizeof(double));
-			child_mesh_mag[i] = calloc(sizar, sizeof(double));	
+			root_mesh_mag[i] = (double *)calloc(sizar, sizeof(double));
+			child_mesh_mag[i] = (double *)calloc(sizar, sizeof(double));	
 		}
 	}
 
-	root_mesh_den = malloc(sizeof(double)*sizar);
-	child_mesh_den = malloc(sizeof(double)*sizar);
+	root_mesh_den = (double **)malloc(sizeof(double)*sizar);
+	child_mesh_den = (double **)malloc(sizeof(double)*sizar);
 	if(root_mesh_den && child_mesh_den)
 	{
 		for (i = 0; i < sizar; ++i)
 		{
-			root_mesh_den[i] = calloc(sizar, sizeof(double));
-			child_mesh_den[i] = calloc(sizar, sizeof(double));	
+			root_mesh_den[i] = (double *)calloc(sizar, sizeof(double));
+			child_mesh_den[i] = (double *)calloc(sizar, sizeof(double));	
 		}
 	}
 
-	c_exs = malloc(sizeof(double *) * sizar);
+	c_exs = (double **)malloc(sizeof(double *) * sizar);
 	if (c_exs){
 		for (i = 0; i < sizar; i++){
-			c_exs[i] = calloc(sizar, sizeof(double));
+			c_exs[i] = (double *)calloc(sizar, sizeof(double));
 		}
 	}
-	c_eys = malloc(sizeof(double *) * sizar);
+	c_eys = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eys){
 		for (i = 0; i < sizar; i++){
-			c_eys[i] = calloc(sizar, sizeof(double));
+			c_eys[i] = (double *)calloc(sizar, sizeof(double));
 		}
 	}
-	c_eyi = malloc(sizeof(double *) * sizar);
+	c_eyi = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eyi){
 		for (i = 0; i < sizar; i++){
-			c_eyi[i] = calloc(sizar, sizeof(double));
+			c_eyi[i] = (double *)calloc(sizar, sizeof(double));
 		}
 	}
-	c_eyi1 = malloc(sizeof(double *) * sizar);
+	c_eyi1 = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eyi1){
 		for (i = 0; i < sizar; i++){
-			c_eyi1[i] = calloc(sizar, sizeof(double));
+			c_eyi1[i] = (double *)calloc(sizar, sizeof(double));
 		}
 	}
 
-	c_erms2 = malloc(sizeof(double *) * sizar);
+	c_erms2 = (double **)malloc(sizeof(double *) * sizar);
 	if (c_erms2){
 		for (i = 0; i < sizar; i++){
-			c_erms2[i] = malloc(sizeof(double) * sizar);
+			c_erms2[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 	// den = malloc(sizeof(double *) * sizar);
@@ -244,129 +244,129 @@ void mem_allocate()
 	// 		den[i] = malloc(sizeof(double) * sizar);
 	// 	}
 	// }
-	c_vx = malloc(sizeof(double *) * sizar);
+	c_vx = (double **)malloc(sizeof(double *) * sizar);
 	if (c_vx){
 		for (i = 0; i < sizar; i++){
-			c_vx[i] = malloc(sizeof(double) * sizar);
+			c_vx[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_vy = malloc(sizeof(double *) * sizar);
+	c_vy = (double **)malloc(sizeof(double *) * sizar);
 	if (c_vy){
 		for (i = 0; i < sizar; i++){
-			c_vy[i] = malloc(sizeof(double) * sizar);
+			c_vy[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_exi = malloc(sizeof(double *) * sizar);
+	c_exi = (double **)malloc(sizeof(double *) * sizar);
 	if (c_exi){
 		for (i = 0; i < sizar; i++){
-			c_exi[i] = malloc(sizeof(double) * sizar);
+			c_exi[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_exi1 = malloc(sizeof(double *) * sizar);
+	c_exi1 = (double **)malloc(sizeof(double *) * sizar);
 	if (c_exi1){
 		for (i = 0; i < sizar; i++){
-			c_exi1[i] = malloc(sizeof(double) * sizar);
+			c_exi1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_ext = malloc(sizeof(double *) * sizar);
+	c_ext = (double **)malloc(sizeof(double *) * sizar);
 	if (c_ext){
 		for (i = 0; i < sizar; i++){
-			c_ext[i] = malloc(sizeof(double) * sizar);
+			c_ext[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_eyt = malloc(sizeof(double *) * sizar);
+	c_eyt = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eyt){
 		for (i = 0; i < sizar; i++){
-			c_eyt[i] = malloc(sizeof(double) * sizar);
+			c_eyt[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_exs1 = malloc(sizeof(double *) * sizar);
+	c_exs1 = (double **)malloc(sizeof(double *) * sizar);
 	if (c_exs1){
 		for (i = 0; i < sizar; i++){
-			c_exs1[i] = malloc(sizeof(double) * sizar);
+			c_exs1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_eys1 = malloc(sizeof(double *) * sizar);
+	c_eys1 = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eys1){
 		for (i = 0; i < sizar; i++){
-			c_eys1[i] = malloc(sizeof(double) * sizar);
+			c_eys1[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_xmid = malloc(sizeof(double) * sizar);
-	c_ymid = malloc(sizeof(double) * sizar);
-	c_sgdx0 = malloc(sizeof(double) * sizar);
-	c_sgdy0 = malloc(sizeof(double) * sizar);
-	c_DINI = malloc(sizeof(double) * sizar);
-	c_DIFFUSION = malloc(sizeof(double *) * sizar);
+	c_xmid = (double *)malloc(sizeof(double) * sizar);
+	c_ymid = (double *)malloc(sizeof(double) * sizar);
+	c_sgdx0 = (double *)malloc(sizeof(double) * sizar);
+	c_sgdy0 = (double *)malloc(sizeof(double) * sizar);
+	c_DINI = (double *)malloc(sizeof(double) * sizar);
+	c_DIFFUSION = (double **)malloc(sizeof(double *) * sizar);
 	if (c_DIFFUSION){
 		for (i = 0; i < sizar; i++){
-			c_DIFFUSION[i] = malloc(sizeof(double) * sizar);
+			c_DIFFUSION[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_frqio = malloc(sizeof(double *) * sizar);
+	c_frqio = (double **)malloc(sizeof(double *) * sizar);
 	if (c_frqio){
 		for (i = 0; i < sizar; i++){
-			c_frqio[i] = malloc(sizeof(double) * sizar);
+			c_frqio[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
-	c_denp = malloc(sizeof(double *) * sizar);
+	c_denp = (double **)malloc(sizeof(double *) * sizar);
 	if (c_denp){
 		for (i = 0; i < sizar; i++){
-			c_denp[i] = malloc(sizeof(double) * sizar);
+			c_denp[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 
-  c_denpold = malloc(sizeof(double *) * sizar);
+  c_denpold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_denpold){
 		for (i = 0; i < sizar; i++){
-			c_denpold[i] = malloc(sizeof(double) * sizar);
+			c_denpold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
   
-  c_exold = malloc(sizeof(double *) * sizar);
+  c_exold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_exold){
 		for (i = 0; i < sizar; i++){
-			c_exold[i] = malloc(sizeof(double) * sizar);
+			c_exold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
   
-   c_eyold = malloc(sizeof(double *) * sizar);
+   c_eyold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_eyold){
 		for (i = 0; i < sizar; i++){
-			c_eyold[i] = malloc(sizeof(double) * sizar);
+			c_eyold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
  
-  c_vxold = malloc(sizeof(double *) * sizar);
+  c_vxold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_vxold){
 		for (i = 0; i < sizar; i++){
-			c_vxold[i] = malloc(sizeof(double) * sizar);
+			c_vxold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	} 
  
-  c_vyold = malloc(sizeof(double *) * sizar);
+  c_vyold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_vyold){
 		for (i = 0; i < sizar; i++){
-			c_vyold[i] = malloc(sizeof(double) * sizar);
+			c_vyold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
   
-  c_hzold = malloc(sizeof(double *) * sizar);
+  c_hzold = (double **)malloc(sizeof(double *) * sizar);
 	if (c_hzold){
 		for (i = 0; i < sizar; i++){
-			c_hzold[i] = malloc(sizeof(double) * sizar);
+			c_hzold[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
    
-	c_hzi = malloc(sizeof(double *) * sizar);
+	c_hzi = (double **)malloc(sizeof(double *) * sizar);
 	if (c_hzi){
 		for (i = 0; i < sizar; i++){
-			c_hzi[i] = malloc(sizeof(double) * sizar);
+			c_hzi[i] = (double *)malloc(sizeof(double) * sizar);
 		}
 	}
 	
-	c_imid = malloc(sizeof(int) * sizar);
-	c_jmid = malloc(sizeof(int) * sizar);
+	c_imid = (int*)malloc(sizeof(int) * sizar);
+	c_jmid = (int*)malloc(sizeof(int) * sizar);
 }
 
 void read_and_assign()
