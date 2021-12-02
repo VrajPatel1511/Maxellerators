@@ -703,7 +703,7 @@ int main()
         cudaMemcpy(dev_erms2, erms2, sizeof(erms2), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_KRMS, &KRMS, sizeof(int), cudaMemcpyHostToDevice);
 
-        RMS<<<(ceil(root_elec->m/32),ceil(root_elec->n/32)),(32,32)>>>(dev_root_elec, dev_z1,dev_z2,dev_inv_nperdt,dev_ext,dev_eyt,dev_ERMSp,dev_erms2,KRMS);
+        RMS<<<(ceil(root_elec->m/32),ceil(root_elec->n/32)),(32,32)>>>(dev_root_elec, dev_z1,dev_z2,dev_inv_nperdt,dev_ext,dev_eyt,dev_ERMSp,dev_erms2,dev_KRMS);
         
         cudaMemcpy(ERMSp, dev_ERMSp, sizeof(dev_ERMSp), cudaMemcpyDeviceToHost);
         cudaMemcpy(erms2, dev_erms2, sizeof(dev_erms2), cudaMemcpyDeviceToHost);
@@ -713,8 +713,8 @@ int main()
         }
        
         cudaFree(dev_root_elec);
-        cudaFree(dev_z1);
-        cudaFree(dev_z2);
+        //cudaFree(dev_z1);
+        //cudaFree(dev_z2);
         cudaFree(dev_inv_nperdt);
         cudaFree(dev_ext);
         cudaFree(dev_eyt);
@@ -873,7 +873,7 @@ int main()
             cudaMemcpy(dev_dtmds, &dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
             HFIELD<<<(ceil(child_mag->m/32),ceil(child_mag->n/32)),(32,32)>>>(dev_mag,dev_exs,dev_eys,dev_dtmds);
             cudaMemcpy(child_mag, dev_mag, sizeof(child_mag), cudaMemcpyDeviceToHost);
-            cudaMemcpy(c_hzi, dev_child_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
+            cudaMemcpy(c_hzi, dev_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
 
             cudaFree(dev_mag);
             cudaFree(dev_c_exs);
@@ -947,7 +947,7 @@ int main()
         cudaMemcpy(dev_erms2, c_erms2, sizeof(c_erms2), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_KRMS, &KRMS, sizeof(KRMS), cudaMemcpyHostToDevice);
 
-        child_RMS<<<(ceil(child_elec->m/32),ceil(child_elec->n/32)),(32,32)>>>(dev_child_elec, dev_z1,dev_z2,dev_inv_nperdt,dev_ext,dev_eyt,dev_erms2,KRMS);
+        child_RMS<<<(ceil(child_elec->m/32),ceil(child_elec->n/32)),(32,32)>>>(dev_child_elec, dev_z1,dev_z2,dev_inv_nperdt,dev_ext,dev_eyt,dev_erms2,dev_KRMS);
         
         cudaMemcpy(c_erms2, dev_erms2, sizeof(dev_erms2), cudaMemcpyDeviceToHost);
         if(KRMS==2)
@@ -956,8 +956,8 @@ int main()
         }
        
         cudaFree(dev_child_elec);
-        cudaFree(dev_z1);
-        cudaFree(dev_z2);
+        //cudaFree(dev_z1);
+        //cudaFree(dev_z2);
         cudaFree(dev_inv_nperdt);
         cudaFree(dev_ext);
         cudaFree(dev_eyt);
@@ -980,8 +980,8 @@ int main()
         cudaMemcpy(dev_c_eys, c_eys, sizeof(c_eys), cudaMemcpyHostToDevice);
         cudaMemcpy(dev_dtmds, &dtmds, sizeof(dtmds), cudaMemcpyHostToDevice);
         HFIELD<<<(ceil(child_mag->m/32),ceil(child_mag->n/32)),(32,32)>>>(dev_mag,dev_c_exs,dev_c_eys,dev_dtmds);
-        cudaMemcpy(child_mag, dev_child_mag, sizeof(child_mag), cudaMemcpyDeviceToHost);
-        cudaMemcpy(c_hzi, dev_child_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
+        cudaMemcpy(child_mag, dev_mag, sizeof(child_mag), cudaMemcpyDeviceToHost);
+        cudaMemcpy(c_hzi, dev_mag->mesh, sizeof(child_mag), cudaMemcpyDeviceToHost);
 
         cudaFree(dev_mag);
         cudaFree(dev_c_exs);
@@ -1069,8 +1069,8 @@ int main()
         }
        
         cudaFree(dev_child_elec);
-        cudaFree(dev_z1);
-        cudaFree(dev_z2);
+       // cudaFree(dev_z1);
+        //cudaFree(dev_z2);
         cudaFree(dev_inv_nperdt);
         cudaFree(dev_ext);
         cudaFree(dev_eyt);

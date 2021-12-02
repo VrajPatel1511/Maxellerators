@@ -7,7 +7,7 @@ double radius=0;
 int rank =0, sizar=3000;
 struct node *newnode(int m, int n ,int locx, int locy, int level)
 {
-	struct node *temp = malloc(sizeof(struct node));
+	struct node *temp = (struct node*)malloc(sizeof(struct node));
 	temp->m = m;
 	temp->n = n;
 	temp->locx = locx;
@@ -25,7 +25,7 @@ void mem_allocate()
 	// 	}
 	// }
 
-	ERMSp = malloc(sizeof(double *) * sizar);
+	ERMSp = (double *)malloc(sizeof(double *) * sizar);
 	if (ERMSp){
 		for (i = 0; i < sizar; i++){
 			ERMSp[i] = malloc(sizeof(double) * sizar);

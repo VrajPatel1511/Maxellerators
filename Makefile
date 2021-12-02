@@ -10,5 +10,5 @@ static_amr: xyfdtd.o static_amr.o
 static_amr.o: static_amr.cu
 	nvcc -c static_amr.cu
 
-xyfdtd.o: xyfdtd.cu
-	nvcc -c xyfdtd.cu
+xyfdtd.o: xyfdtd.c
+	gcc -c xyfdtd.c
