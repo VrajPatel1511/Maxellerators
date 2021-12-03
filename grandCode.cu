@@ -1780,27 +1780,27 @@ __global__ void setup_init(struct node *dev_root_elec,struct node * dev_den,doub
     }
 }
 
-// __global__ void setup_init1(struct node * root_den,int *ny,int *nx,double *xxi,double *ds,double *ardix,double *yyj,double *ardiy,double *xd0,double *yd0,double *dinig,double * sgdx0,double *sgdy0,double *DINI, int *K)
-// {
-//     int i = threadIdx.x + blockIdx.x * blockDim.x; 
-//     int j = threadIdx.y + blockIdx.y * blockDim.y; 
-//     if(i<*nx && j<*ny)
-//     {
-//         *xxi=(*ds)*i;
-// 	    *ardix=0.0;
-// 	    if(sgdx0[1]>0)
-// 	        *ardix=(-pow(((*xxi)-(*xd0)),2))/2.0/sgdx0[1]/sgdx0[1];
-//         *yyj=(*ds)*j;
-//         *ardiy=0.0;
-//         if(sgdy0[1]>0) 
-//             *ardiy=-pow((*(yyj)-(*yd0)),2)/2.0/sgdy0[*K]/sgdy0[*K];
-//             *dinig=DINI[*K]*exp((*ardix)+(*ardiy));
-//             if(*dinig<=1.0e13)
-//                 *dinig=0;
+__global__ void setup_init1(struct node * root_den,int *ny,int *nx,double *xxi,double *ds,double *ardix,double *yyj,double *ardiy,double *xd0,double *yd0,double *dinig,double * sgdx0,double *sgdy0,double *DINI, int *K)
+{
+    int i = threadIdx.x + blockIdx.x * blockDim.x; 
+    int j = threadIdx.y + blockIdx.y * blockDim.y; 
+    if(i<*nx && j<*ny)
+    {
+        *xxi=(*ds)*i;
+	    *ardix=0.0;
+	    if(sgdx0[1]>0)
+	        *ardix=(-pow(((*xxi)-(*xd0)),2))/2.0/sgdx0[1]/sgdx0[1];
+        *yyj=(*ds)*j;
+        *ardiy=0.0;
+        if(sgdy0[1]>0) 
+            *ardiy=-pow((*(yyj)-(*yd0)),2)/2.0/sgdy0[*K]/sgdy0[*K];
+            *dinig=DINI[*K]*exp((*ardix)+(*ardiy));
+            if(*dinig<=1.0e13)
+                *dinig=0;
                  
-//         root_den->mesh[i][j] = root_den->mesh[i][j]+ (*dinig);
-//     }
-// }
+        root_den->mesh[i][j] = root_den->mesh[i][j]+ (*dinig);
+    }
+}
 
 int main()
 {
@@ -4082,82 +4082,82 @@ void SETUP2()
       
 	    //!================Initial density, Gaussian, defined =======================
 	    
-	   int j;
+	  //  int j;
 
-	    for(i=0;i<=nx;i++)
-	    {
-	        xxi=ds*i;
-	        ardix=0.0;
-	        if(sgdx0[1]>0)
-	           ardix=(-pow((xxi-xd0),2))/2.0/sgdx0[1]/sgdx0[1];
+	  //   for(i=0;i<=nx;i++)
+	  //   {
+	  //       xxi=ds*i;
+	  //       ardix=0.0;
+	  //       if(sgdx0[1]>0)
+	  //          ardix=(-pow((xxi-xd0),2))/2.0/sgdx0[1]/sgdx0[1];
 
-            for(j=0;j<=ny;j++){    
-                yyj=ds*j;
-                ardiy=0.0;
-                if(sgdy0[K]>0) 
-                  ardiy=-pow((yyj-yd0),2)/2.0/sgdy0[K]/sgdy0[K];
-                 dinig=DINI[K]*exp(ardix+ardiy);
-                 if(dinig<=1.0e13)
-                   dinig=0;
+    //         for(j=0;j<=ny;j++){    
+    //             yyj=ds*j;
+    //             ardiy=0.0;
+    //             if(sgdy0[K]>0) 
+    //               ardiy=-pow((yyj-yd0),2)/2.0/sgdy0[K]/sgdy0[K];
+    //              dinig=DINI[K]*exp(ardix+ardiy);
+    //              if(dinig<=1.0e13)
+    //                dinig=0;
                  
-                root_den->mesh[i][j] = root_den->mesh[i][j]+ dinig;
-                denp[i][j]=root_den->mesh[i][j];
-            }
-	    }
+    //             root_den->mesh[i][j] = root_den->mesh[i][j]+ dinig;
+    //             denp[i][j]=root_den->mesh[i][j];
+    //         }
+	  //   }
 
         
 
-        // cudaMalloc((void**)&dev_den, sizeof(root_den));
-        // cudaMalloc((void**)&dev_ny, sizeof(int));
-        // cudaMalloc((void**)&dev_nx, sizeof(int));
-        // cudaMalloc((void**)&dev_xxi, sizeof(double));
-        // cudaMalloc((void**)&dev_ds, sizeof(double));
-        // cudaMalloc((void**)&dev_ardix, sizeof(double));
-        // cudaMalloc((void**)&dev_yyj, sizeof(double));
-        // cudaMalloc((void**)&dev_ardiy, sizeof(double));
-        // cudaMalloc((void**)&dev_yd0, sizeof(double));
-        // cudaMalloc((void**)&dev_dinig, sizeof(double));
-        // cudaMalloc((void**)&dev_sgdx0, sizeof(sgdx0));
-        // cudaMalloc((void**)&dev_sgdy0, sizeof(dev_sgdy0));
-        // cudaMalloc((void**)&dev_DINI, sizeof(dev_DINI));
-        // cudaMalloc((void**)&dev_K, sizeof(K));
+        cudaMalloc((void**)&dev_den, sizeof(root_den));
+        cudaMalloc((void**)&dev_ny, sizeof(int));
+        cudaMalloc((void**)&dev_nx, sizeof(int));
+        cudaMalloc((void**)&dev_xxi, sizeof(double));
+        cudaMalloc((void**)&dev_ds, sizeof(double));
+        cudaMalloc((void**)&dev_ardix, sizeof(double));
+        cudaMalloc((void**)&dev_yyj, sizeof(double));
+        cudaMalloc((void**)&dev_ardiy, sizeof(double));
+        cudaMalloc((void**)&dev_yd0, sizeof(double));
+        cudaMalloc((void**)&dev_dinig, sizeof(double));
+        cudaMalloc((void**)&dev_sgdx0, sizeof(sgdx0));
+        cudaMalloc((void**)&dev_sgdy0, sizeof(dev_sgdy0));
+        cudaMalloc((void**)&dev_DINI, sizeof(dev_DINI));
+        cudaMalloc((void**)&dev_K, sizeof(K));
 
-        // cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_ny, &ny, sizeof(ny), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_nx, &nx, sizeof(nx), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_xxi, &xxi, sizeof(xxi), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_ds, &ds, sizeof(ds), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_ardix, &ardix, sizeof(ardix), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_yyj, &yyj, sizeof(yyj), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_ardiy, &ardiy, sizeof(ardiy), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_xd0, &xd0, sizeof(xd0), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_yd0, &yd0, sizeof(yd0), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_dinig, &dinig, sizeof(dinig), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_sgdx0, sgdx0, sizeof(sgdx0), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_sgdy0, sgdy0, sizeof(sgdy0), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_DINI, DINI, sizeof(DINI), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(dev_K, &K, sizeof(K), cudaMemcpyDeviceToHost);
+        cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ny, &ny, sizeof(ny), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_nx, &nx, sizeof(nx), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_xxi, &xxi, sizeof(xxi), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ds, &ds, sizeof(ds), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ardix, &ardix, sizeof(ardix), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_yyj, &yyj, sizeof(yyj), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_ardiy, &ardiy, sizeof(ardiy), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_xd0, &xd0, sizeof(xd0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_yd0, &yd0, sizeof(yd0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_dinig, &dinig, sizeof(dinig), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_sgdx0, sgdx0, sizeof(sgdx0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_sgdy0, sgdy0, sizeof(sgdy0), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_DINI, DINI, sizeof(DINI), cudaMemcpyDeviceToHost);
+        cudaMemcpy(dev_K, &K, sizeof(K), cudaMemcpyDeviceToHost);
 
         
-        // setup_init1<<<(ceil(nx/32),ceil(ny/32)),(32,32)>>>(dev_den, dev_ny, dev_nx, dev_xxi, dev_ds, dev_ardix,dev_yyj,dev_ardiy,dev_xd0,dev_yd0,dev_dinig,dev_sgdx0,dev_sgdy0,dev_DINI,dev_K);
+        setup_init1<<<(ceil(nx/32),ceil(ny/32)),(32,32)>>>(dev_den, dev_ny, dev_nx, dev_xxi, dev_ds, dev_ardix,dev_yyj,dev_ardiy,dev_xd0,dev_yd0,dev_dinig,dev_sgdx0,dev_sgdy0,dev_DINI,dev_K);
 
-        // cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(denp, dev_den->mesh, sizeof(dev_den->mesh), cudaMemcpyDeviceToHost);
+        cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
+        cudaMemcpy(denp, dev_den->mesh, sizeof(dev_den->mesh), cudaMemcpyDeviceToHost);
 
-        // cudaFree(dev_den);
-        // cudaFree(dev_ny);
-        // cudaFree(dev_nx);
-        // cudaFree(dev_xxi);
-        // cudaFree(dev_ds);
-        // cudaFree(dev_ardix);
-        // cudaFree(dev_yyj);
-        // cudaFree(dev_ardiy);
-        // cudaFree(dev_xd0);
-        // cudaFree(dev_yd0);
-        // cudaFree(dev_dinig);
-        // cudaFree(dev_sgdx0);
-        // cudaFree(dev_sgdy0);
-        // cudaFree(dev_DINI);
+        cudaFree(dev_den);
+        cudaFree(dev_ny);
+        cudaFree(dev_nx);
+        cudaFree(dev_xxi);
+        cudaFree(dev_ds);
+        cudaFree(dev_ardix);
+        cudaFree(dev_yyj);
+        cudaFree(dev_ardiy);
+        cudaFree(dev_xd0);
+        cudaFree(dev_yd0);
+        cudaFree(dev_dinig);
+        cudaFree(dev_sgdx0);
+        cudaFree(dev_sgdy0);
+        cudaFree(dev_DINI);
   
           printf("Entered here \n");
           interpolatexinitial(1.0);    //! to interpolate the initial gaussian density parent to child location
