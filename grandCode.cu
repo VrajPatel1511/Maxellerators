@@ -1,4 +1,4 @@
-%%cu
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -1776,6 +1776,7 @@ __global__ void setup_init(struct node *dev_root_elec,struct node * dev_den,doub
     {
         dev_den->mesh[i][j] = 0.0;
   		dev_root_elec->mesh[i][j] = (*E0)/sqrt(2.0);
+             //   printf("Result",dev_root_elec->mesh[i][j]);
     }
 }
 
@@ -2069,6 +2070,8 @@ int main()
         for (ix=0;ix<root_den->m;ix++)
         {
             //! first threshold line (10% up/ down jcent (or ycent))
+          //printf("value of Ix VALUE :%d  &  %d \n",ix,root_den->m);  
+                
          if((root_den->mesh[ix][py1])>1.0e16 || (root_den->mesh[ix][py2])>1.0e16) //! density check at both ystart/yend of initial box exceeding threshold to expand along y
          {  
            county1+=1;
@@ -2241,12 +2244,12 @@ int main()
         
                 
       	
-        if((t>tstop)||(root_den->mesh[iend][jcent])>1.0e16) //! use to terminate the full code while simulating
+        if((t>tstop)||(root_den->mesh[iend][jcent])>1.0e16 || KELEC==50) //! use to terminate the full code while simulating
         //if((t>tstop)||KELEC==10520)      //! use particular value of KELEC to stop code while experimenting               
         //if((t>tstop)||KELEC==4020)
         {  
 	         
-    	    printf("code has successfully ended\n");  
+          printf("code has successfully ended\n");  
           gettimeofday(&total_end,NULL);   
            tkl=total_end.tv_sec; //!new
            info = localtime(&tkl);//!new
@@ -3938,6 +3941,7 @@ void SETUP2()
   	child_mag->parent = root_mag;
 
      //!---------electron density----------
+        printf("value of NX and NY = %d & %d",nx,ny);
   	root_den = newnode(nx, ny, 0, 0, 0);
   	child_den = newnode(xtotal2, ytotal2, xstar, ystar, 1);
   
@@ -3992,30 +3996,49 @@ void SETUP2()
   	// 		child_elec->mesh[i][j] = E0/sqrt(2.0);
   	// 	}
   	// }
+      
+     // printf("size of root_elec is =%d \n",sizeof(root_elec));
       cudaMalloc((void**)&dev_root_elec, sizeof(root_elec));
       cudaMalloc((void**)&dev_den, sizeof(root_den));
       cudaMalloc((void**)&dev_E0, sizeof(double));
+     // printf("root_elec->m value before = %d & root_den->m = %d\n",root_elec->m,root_den->m);
+      int temp_m , temp_n;
+      temp_m = root_den->m;
+      temp_n = root_den->n;
       cudaMemcpy(dev_root_elec, root_elec, sizeof(root_elec), cudaMemcpyHostToDevice);
       cudaMemcpy(dev_E0, &E0, sizeof(double), cudaMemcpyHostToDevice);
+      
+     // printf("Enter in kernal \n");
       setup_init<<<(ceil(root_elec->m/32),ceil(root_elec->n/32)),(32,32)>>>(dev_root_elec,dev_den,dev_E0);    
-    cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
-    cudaMemcpy(root_elec, dev_root_elec, sizeof(dev_den), cudaMemcpyDeviceToHost);
-    cudaFree(dev_root_elec);
+     // printf("Complete kerenl\n");
+     // printf("Size of dev den is =%d\n",sizeof(dev_den)); 
+      cudaMemcpy(root_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
+      cudaMemcpy(root_elec, dev_root_elec, sizeof(dev_root_elec), cudaMemcpyDeviceToHost);
+      root_den->m = temp_m;
+      root_den->n = temp_n;
+     // printf("Data copied \n");  
+     // printf("root_elec->m value:%d & root_den = %d\n",root_elec->m,root_den->m);
+     cudaFree(dev_root_elec);
     cudaFree(dev_den);
     cudaFree(dev_E0);
-
-    cudaMalloc((void**)&dev_root_elec, sizeof(child_elec));
+   
+     //printf("Memory free");
+      
+      cudaMalloc((void**)&dev_root_elec, sizeof(child_elec));
       cudaMalloc((void**)&dev_den, sizeof(child_den));
       cudaMalloc((void**)&dev_E0, sizeof(double));
       cudaMemcpy(dev_root_elec, child_elec, sizeof(child_elec), cudaMemcpyHostToDevice);
       cudaMemcpy(dev_E0, &E0, sizeof(double), cudaMemcpyHostToDevice);
-      setup_init<<<(ceil(child_elec->m/32),ceil(child_elec->n/32)),(32,32)>>>(dev_root_elec,dev_den,dev_E0);    
+      //    printf("Enter in second kernel\n"); 
+              setup_init<<<(ceil(child_elec->m/32),ceil(child_elec->n/32)),(32,32)>>>(dev_root_elec,dev_den,dev_E0);    
+       //   printf("Complete second kernel\n");
     cudaMemcpy(child_den, dev_den, sizeof(dev_den), cudaMemcpyDeviceToHost);
     cudaMemcpy(child_elec, dev_root_elec, sizeof(dev_den), cudaMemcpyDeviceToHost);
-    cudaFree(dev_root_elec);
+ //  printf("Data copied 2 \n"); 
+   cudaFree(dev_root_elec);
     cudaFree(dev_den);
     cudaFree(dev_E0);
-
+   // printf("Memory free second time\n");
             
       //!========================= centering the quantities in the new mesh refinement region =============
       
