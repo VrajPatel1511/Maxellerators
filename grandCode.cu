@@ -190,15 +190,24 @@ double **dev_exs;
 double **dev_eys;
 double *dev_dtmds;
 struct node * dev_root_elec,*dev_child_elec,*dev_den;
-double *dev_x0,dev_OMEG,dev_newt,dev_inv_c,dev_c_dt,dev_sine,dev_sine1,dev_x,dev_c,dev_c_ds;
+double *dev_newt,*dev_inv_c,*dev_c_dt,*dev_sine,*dev_sine1,*dev_c_ds;
 int *dev_ny,*dev_nx;
-double *dev_xxi,*dev_ds,*dev_ardix,*dev_yyj,*dev_ardiy,*dev_xd0,*dev_yd0,*dev_dinig;
+double *dev_xxi,*dev_ardix,*dev_yyj,*dev_ardiy,*dev_xd0,*dev_yd0,*dev_dinig;
 double * dev_sgdx0,*dev_sgdy0,*dev_DINI;
 double dev_z1,dev_z2,*dev_inv_nperdt,*dev_E0,**dev_hzi;
-double **dev_ext,**dev_eyt,**dev_ERMSp,**dev_erms2,**dev_temp_rms,**dev_c_exs,**dev_c_eys,**dev_denp;
+double **dev_ext,*dev_const5y,**dev_ERMSp,**dev_erms2,**dev_temp_rms,**dev_c_exs,**dev_c_eys,**dev_denp;
 int *dev_KRMS,*dev_K;
 
 
+//elec kernel
+
+double **dev_eyi,**dev_eyi1,*dev_omp2x,*dev_const3,*dev_const4,*dev_const5x,*dev_betax,*dev_const6x;
+double **dev_exs_old,*dev_qe,*dev_const7,*dev_dteds,**dev_vx,**dev_vx_old,**dev_exi1,*dev_alpha;
+double *dev_qmdt,*dev_extk,*dev_const8,*dev_betay,*dev_x,*dev_ds,*dev_x0,*dev_c,*dev_t1,*dev_OMEG;
+double *dev_omp2y,*dev_const6y,*dev_eytk,**dev_eyt,**dev_eys_old,**dev_vy,**dev_vy_old ,**dev_exi;
+int *dev_i;
+
+ struct node *dev_root_mag , *dev_root_den;
 //xyfdtd.cu
 
 
@@ -1769,40 +1778,58 @@ __global__ void child_RMS(struct node * root_elec,double z1,double z2,double *in
     }
 }
 
-__global__ void setup_init(struct node *dev_root_elec,struct node * dev_den,double *E0)
+//e filed kernel
+__global__ void EFIELD1(struct node * root_elec,struct node * root_mag, struct node * root_den,double **eyi,double **eyi1,double *omp2x,double *const3,double *const4,double *const5x,double *betax,double *const6x, double **exs_old , double *qe , double *const7 , double *dteds ,double **vx , double **vx_old , double **exi1 , double *alpha, double *qmdt , double *extk , double *const8 , double *betay , double *x , double *ds , double *x0 , double *c , double *t1 , double *OMEG, double *omp2y, double *eytk , double **eyt , double **eys_old , double **eys,double **vy, double *inv_c,int *i,double *sine,double *sine1,double *E0,double **ext,double **exi,double **exs,double *const5y,double *const6y,double **vy_old)
 {
-    int i = threadIdx.x + blockIdx.x * blockDim.x;
-    int j = threadIdx.y + blockIdx.y * blockDim.y;
-    if(i<dev_root_elec->m && j>dev_root_elec->n)
+    int j = threadIdx.x + blockIdx.x * blockDim.x;
+    if(j <root_elec->n)
     {
-        dev_den->mesh[i][j] = 0.0;
-  		dev_root_elec->mesh[i][j] = (*E0)/sqrt(2.0);
-             //   printf("Result",dev_root_elec->mesh[i][j]);
-    }
+
+            eyi[(*i)][j] =   (*E0)*(*sine);  //! incident field () at t
+            eyi1[(*i)][j] =  (*E0)*(*sine1); //! incident field () at t+dt
+
+
+            (*omp2x)=(root_den->mesh[(*i)][j]+root_den->mesh[(*i)+1][j])*(*const3);
+            (*betax)=(*omp2x)*(*const4);
+            (*const5x)=1.0/(1.0+(*betax));
+            (*const6x)=1.0-(*betax);
+            if(j>0)
+            {
+            	(*extk)=ext[(*i)][j];
+                exs_old[(*i)][j] = exs[(*i)][j];
+             //! Scattered E-field x update depends on previous E-data, previous H-data (top/bottom), density data (space:left/ right),velocity (same location)
+                exs[(*i)][j]=(*const5x)*( exs[(*i)][j]*((*const6x))+(*qe)*(root_den->mesh[(*i)][j]+root_den->mesh[(*i)+1][j])*vx[(*i)][j]*(*const7)
+                                     -(exi[(*i)][j]+exi1[(*i)][j])*(*betax)+(root_mag->mesh[(*i)][j]-root_mag->mesh[(*i)][j-1])*(*dteds));
+
+                vx_old[(*i)][j] = vx[(*i)][j];
+				ext[(*i)][j]=exs[(*i)][j]+exi1[(*i)][j];     //! Total field = inci + scattered
+                vx[(*i)][j]=vx[(*i)][j]*(*alpha) - (*qmdt)*(ext[(*i)][j]+(*extk))*(*const8);
+
+
+            }
+            if(i>0)
+            {
+
+                (*omp2y)=(root_den->mesh[(*i)][j]+root_den->mesh[(*i)][j+1])*(*const3);
+                (*betay)=(*omp2y)*(*const4);
+                (*const5y)=1.0/(1.0+(*betay));
+                (*const6y)=1.0-(*betay);
+
+                (*eytk)=eyt[(*i)][j];
+                eys_old[(*i)][j] = eys[(*i)][j];      //! reqd for interpolation
+                //!Scattered E-field y update depends on previous E-data, previous H-data (left/right), density data (space:top/ bottom),velocity (same location)
+                eys[(*i)][j]=(*const5y)*(eys[(*i)][j]*(*const6y)+(*qe)*(root_den->mesh[(*i)][j]+root_den->mesh[(*i)][j+1])*vy[(*i)][j]*(*const7)
+                                 -(eyi[(*i)][j]+eyi1[(*i)][j])*(*betay)-(root_mag->mesh[(*i)][j]-root_mag->mesh[(*i)-1][j])*(*dteds));
+
+
+                eyt[(*i)][j]=eys[(*i)][j]+eyi1[(*i)][j];    //! Total field = inci + scattered
+                vy_old[(*i)][j] = vy[(*i)][j];        //! reqd for interpolation
+                vy[(*i)][j]=vy[(*i)][j]*(*alpha) - (*qmdt)*(eyt[(*i)][j]+(*eytk))*(*const8);     //! velocity update
+            }
+        }
 }
 
-__global__ void setup_init1(struct node * root_den,int *ny,int *nx,double *xxi,double *ds,double *ardix,double *yyj,double *ardiy,double *xd0,double *yd0,double *dinig,double * sgdx0,double *sgdy0,double *DINI, int *K, double **denp)
-{
-    int i = threadIdx.x + blockIdx.x * blockDim.x;
-    int j = threadIdx.y + blockIdx.y * blockDim.y;
-    if(i<*nx && j<*ny)
-    {
-        *xxi=(*ds)*i;
-	    *ardix=0.0;
-	    if(sgdx0[1]>0)
-	        *ardix=(-pow(((*xxi)-(*xd0)),2))/2.0/sgdx0[1]/sgdx0[1];
-        *yyj=(*ds)*j;
-        *ardiy=0.0;
-        if(sgdy0[1]>0)
-            *ardiy=-pow((*(yyj)-(*yd0)),2)/2.0/sgdy0[*K]/sgdy0[*K];
-            *dinig=DINI[*K]*exp((*ardix)+(*ardiy));
-            if(*dinig<=1.0e13)
-                *dinig=0;
 
-        root_den->mesh[i][j] = root_den->mesh[i][j]+ (*dinig);
-        denp[i][j]=root_den->mesh[i][j];
-    }
-}
 
 int main()
 {
@@ -2246,7 +2273,7 @@ int main()
 
 
 
-        if((t>tstop)||(root_den->mesh[iend][jcent]) >1.0e16 || KELEC==120) //! use to terminate the full code while simulating
+        if((t>tstop)||(root_den->mesh[iend][jcent]) >1.0e16 || KELEC==1000) //! use to terminate the full code while simulating
         //if((t>tstop)||KELEC==10520)      //! use particular value of KELEC to stop code while experimenting
         //if((t>tstop)||KELEC==4020)
         {
@@ -2809,6 +2836,54 @@ int main()
 void EFIELD()
 {
      gettimeofday(&begin,NULL);
+
+     //memory allocation
+
+cudaMalloc((void **)&dev_eyi,sizeof(eyi));
+cudaMalloc((void **)&dev_eyi1,sizeof(eyi1));
+cudaMalloc((void **)&dev_omp2x,sizeof(omp2x));
+cudaMalloc((void **)&dev_const3,sizeof(const3));
+cudaMalloc((void **)&dev_const4,sizeof(const4));
+cudaMalloc((void **)&dev_const5x,sizeof(const5x));
+cudaMalloc((void **)&dev_betax,sizeof(betax));
+cudaMalloc((void **)&dev_const6x,sizeof(const6x));
+cudaMalloc((void **)&dev_exs_old,sizeof(exs_old));
+cudaMalloc((void **)&dev_qe,sizeof(qe));
+cudaMalloc((void **)&dev_const7,sizeof(const7));
+cudaMalloc((void **)&dev_dteds,sizeof(dteds));
+cudaMalloc((void **)&dev_vx,sizeof(vx));
+cudaMalloc((void **)&dev_vx_old,sizeof(vx_old));
+cudaMalloc((void **)&dev_exi1,sizeof(exi1));
+cudaMalloc((void **)&dev_alpha,sizeof(alpha));
+cudaMalloc((void **)&dev_qmdt,sizeof(qmdt));
+cudaMalloc((void **)&dev_extk,sizeof(extk));
+cudaMalloc((void **)&dev_const8,sizeof(const8));
+cudaMalloc((void **)&dev_betay,sizeof(betay));
+cudaMalloc((void **)&dev_x,sizeof(x));
+cudaMalloc((void **)&dev_ds,sizeof(ds));
+cudaMalloc((void **)&dev_x0,sizeof(x0));
+cudaMalloc((void **)&dev_c,sizeof(c));
+cudaMalloc((void **)&dev_t1,sizeof(t));
+cudaMalloc((void **)&dev_OMEG,sizeof(OMEG));
+cudaMalloc((void **)&dev_omp2y,sizeof(omp2y));
+cudaMalloc((void **)&dev_const5y,sizeof(const5y));
+cudaMalloc((void **)&dev_const6y,sizeof(const6y));
+cudaMalloc((void **)&dev_eytk,sizeof(eytk));
+cudaMalloc((void **)&dev_eyt,sizeof(eyt));
+cudaMalloc((void **)&dev_eys_old,sizeof(eys_old));
+cudaMalloc((void **)&dev_eys,sizeof(eys));
+cudaMalloc((void **)&dev_vy,sizeof(vy));
+cudaMalloc((void **)&dev_inv_c,sizeof(inv_c));
+cudaMalloc((void **)&dev_exi,sizeof(dev_exi));
+
+cudaMalloc((void **)&dev_sine,sizeof(sine));
+cudaMalloc((void **)&dev_sine1,sizeof(sine1));
+cudaMalloc((void **)&dev_i,sizeof(i));
+cudaMalloc((void **)&dev_E0,sizeof(E0));
+  //end memory
+
+
+
     for(i=0; i<root_elec->m;i++)
     {
     	x=i*ds;
@@ -2824,58 +2899,160 @@ void EFIELD()
         }
 
 
+				//
+        // for(j=0;j<root_elec->n;j++)
+        // {
+				//
+        //     eyi[i][j] =   E0*(sine);  //! incident field () at t
+        //     eyi1[i][j] =  E0*(sine1); //! incident field () at t+dt
+				//
+        // }
+				//
+        // for(j=0;j<root_elec->n;j++)
+        // {
+        //     omp2x=(root_den->mesh[i][j]+root_den->mesh[i+1][j])*const3;
+        //     betax=omp2x*const4;
+        //     const5x=1.0/(1.0+betax);
+        //     const6x=1.0-betax;
+        //     if(j>0)
+        //     {
+        //     	extk=ext[i][j];
+        //         exs_old[i][j] = exs[i][j];
+        //      //! Scattered E-field x update depends on previous E-data, previous H-data (top/bottom), density data (space:left/ right),velocity (same location)
+        //         exs[i][j]=const5x*( exs[i][j]*(const6x)+qe*(root_den->mesh[i][j]+root_den->mesh[i+1][j])*vx[i][j]*const7
+        //                              -(exi[i][j]+exi1[i][j])*betax+(root_mag->mesh[i][j]-root_mag->mesh[i][j-1])*dteds);
+				//
+        //         vx_old[i][j] = vx[i][j];
+				// ext[i][j]=exs[i][j]+exi1[i][j];     //! Total field = inci + scattered
+        //         vx[i][j]=vx[i][j]*alpha - qmdt*(ext[i][j]+extk)*const8;
+				//
+				//
+        //     }
+        //     if(i>0)
+        //     {
+				//
+        //         omp2y=(root_den->mesh[i][j]+root_den->mesh[i][j+1])*const3;
+        //         betay=omp2y*const4;
+        //         const5y=1.0/(1.0+betay);
+        //         const6y=1.0-betay;
+				//
+        //         eytk=eyt[i][j];
+        //         eys_old[i][j] = eys[i][j];      //! reqd for interpolation
+        //         //!Scattered E-field y update depends on previous E-data, previous H-data (left/right), density data (space:top/ bottom),velocity (same location)
+        //         eys[i][j]=const5y*(eys[i][j]*(const6y)+qe*(root_den->mesh[i][j]+root_den->mesh[i][j+1])*vy[i][j]*const7
+        //                          -(eyi[i][j]+eyi1[i][j])*betay-(root_mag->mesh[i][j]-root_mag->mesh[i-1][j])*dteds);
+				//
+				//
+        //         eyt[i][j]=eys[i][j]+eyi1[i][j];    //! Total field = inci + scattered
+        //         vy_old[i][j] = vy[i][j];        //! reqd for interpolation
+        //         vy[i][j]=vy[i][j]*alpha - qmdt*(eyt[i][j]+eytk)*const8;     //! velocity update
+        //     }
+        // }
 
-        for(j=0;j<root_elec->n;j++)
-        {
-
-            eyi[i][j] =   E0*(sine);  //! incident field () at t
-            eyi1[i][j] =  E0*(sine1); //! incident field () at t+dt
-
-        }
-
-        for(j=0;j<root_elec->n;j++)
-        {
-            omp2x=(root_den->mesh[i][j]+root_den->mesh[i+1][j])*const3;
-            betax=omp2x*const4;
-            const5x=1.0/(1.0+betax);
-            const6x=1.0-betax;
-            if(j>0)
-            {
-            	extk=ext[i][j];
-                exs_old[i][j] = exs[i][j];
-             //! Scattered E-field x update depends on previous E-data, previous H-data (top/bottom), density data (space:left/ right),velocity (same location)
-                exs[i][j]=const5x*( exs[i][j]*(const6x)+qe*(root_den->mesh[i][j]+root_den->mesh[i+1][j])*vx[i][j]*const7
-                                     -(exi[i][j]+exi1[i][j])*betax+(root_mag->mesh[i][j]-root_mag->mesh[i][j-1])*dteds);
-
-                vx_old[i][j] = vx[i][j];
-				ext[i][j]=exs[i][j]+exi1[i][j];     //! Total field = inci + scattered
-                vx[i][j]=vx[i][j]*alpha - qmdt*(ext[i][j]+extk)*const8;
 
 
-            }
-            if(i>0)
-            {
-
-                omp2y=(root_den->mesh[i][j]+root_den->mesh[i][j+1])*const3;
-                betay=omp2y*const4;
-                const5y=1.0/(1.0+betay);
-                const6y=1.0-betay;
-
-                eytk=eyt[i][j];
-                eys_old[i][j] = eys[i][j];      //! reqd for interpolation
-                //!Scattered E-field y update depends on previous E-data, previous H-data (left/right), density data (space:top/ bottom),velocity (same location)
-                eys[i][j]=const5y*(eys[i][j]*(const6y)+qe*(root_den->mesh[i][j]+root_den->mesh[i][j+1])*vy[i][j]*const7
-                                 -(eyi[i][j]+eyi1[i][j])*betay-(root_mag->mesh[i][j]-root_mag->mesh[i-1][j])*dteds);
+				//kernel
 
 
-                eyt[i][j]=eys[i][j]+eyi1[i][j];    //! Total field = inci + scattered
-                vy_old[i][j] = vy[i][j];        //! reqd for interpolation
-                vy[i][j]=vy[i][j]*alpha - qmdt*(eyt[i][j]+eytk)*const8;     //! velocity update
-            }
-        }
+				cudaMemcpy(dev_eyi,eyi,sizeof(eyi),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_eyi1,eyi1,sizeof(eyi1),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_omp2x,&omp2x,sizeof(omp2x),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_const3,&const3,sizeof(const3),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_const4,&const4,sizeof(const4),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_const5x,&const5x,sizeof(const5x),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_betax,&betax,sizeof(betax),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_const6x,&const6x,sizeof(const6x),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_exs_old,exs_old,sizeof(exs_old),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_qe,&qe,sizeof(qe),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_const7,&const7,sizeof(const7),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_dteds,&dteds,sizeof(dteds),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_vx,vx,sizeof(vx),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_vx_old,vx_old,sizeof(vx_old),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_exi1,exi1,sizeof(exi1),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_exi,exi,sizeof(exi),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_alpha,&alpha,sizeof(alpha),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_inv_c,&inv_c,sizeof(inv_c),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_vy,vy,sizeof(vy),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_eys,&eys,sizeof(eys),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_eys_old,eys_old,sizeof(eys_old),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_eyt,eyt,sizeof(eyt),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_eytk,&eytk,sizeof(eytk),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_const6y,&const6y,sizeof(const6y),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_const5x,&const5x,sizeof(const5x),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_omp2y,&omp2y,sizeof(omp2y),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_OMEG,&OMEG,sizeof(OMEG),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_t1,&t,sizeof(t),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_c,&c,sizeof(c),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_x0,&x0,sizeof(x0),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_ds,&ds,sizeof(ds),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_x,&x,sizeof(x),cudaMemcpyHostToDevice);
+				// cudaMemcpy(dev_betay,&betay,sizeof(betay),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_const8,&const8,sizeof(const8),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_extk,&extk,sizeof(extk),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_qmdt,&qmdt,sizeof(qmdt),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_sine,&sine,sizeof(sine),cudaMemcpyHostToDevice);
+			        cudaMemcpy(dev_sine1,&sine1,sizeof(sine1),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_i,&i,sizeof(i),cudaMemcpyHostToDevice);
+				cudaMemcpy(dev_E0,&E0,sizeof(E0),cudaMemcpyHostToDevice);
+
+
+
+				 EFIELD1<<<root_elec->n/32,32>>>(dev_root_elec,dev_root_mag, dev_root_den, dev_eyi,dev_eyi1 ,dev_omp2x,dev_const3,dev_const4,dev_const5x,dev_betax, dev_const6x, dev_exs_old , dev_qe , dev_const7 , dev_dteds ,dev_vx , dev_vx_old , dev_exi1 , dev_alpha, dev_qmdt , dev_extk , dev_const8 , dev_betay , dev_x , dev_ds , dev_x0 , dev_c , dev_t1 , dev_OMEG, dev_omp2y, dev_eytk , dev_eyt , dev_eys_old , dev_eys, dev_vy, dev_inv_c,dev_i, dev_sine, dev_sine1,dev_E0,dev_ext,dev_exi,dev_exs,dev_const5y,dev_const6y,dev_vy_old);
+
+
+				 cudaMemcpy(exs_old,dev_exs_old,sizeof(dev_exs_old),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(exs,dev_exs,sizeof(dev_exs),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(vx_old,dev_vx_old,sizeof(dev_vx_old),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(ext,dev_ext,sizeof(dev_ext),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(vx,dev_vx,sizeof(dev_vx),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(eys_old,dev_eys_old,sizeof(dev_eys_old),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(eys,dev_eys,sizeof(dev_eys),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(vy_old,dev_vy_old,sizeof(dev_vy_old),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(eyt,dev_eyt,sizeof(dev_eyt),cudaMemcpyDeviceToHost);
+				 cudaMemcpy(vy,dev_vy,sizeof(dev_vy),cudaMemcpyDeviceToHost);
+
         MR_MUR(i);
     }
     gettimeofday(&end,NULL);
+		cudaFree(dev_eyi);
+		cudaFree(dev_eyi1);
+		cudaFree(dev_omp2x);
+		cudaFree(dev_const3);
+		cudaFree(dev_const4);
+		cudaFree(dev_const5x);
+		cudaFree(dev_betax);
+		cudaFree(dev_const6x);
+		cudaFree(dev_exs_old);
+		cudaFree(dev_qe);
+		cudaFree(dev_const7);
+		cudaFree(dev_dteds);
+		cudaFree(dev_vx);
+		cudaFree(dev_vx_old);
+		cudaFree(dev_exi1);
+		cudaFree(dev_alpha);
+		cudaFree(dev_qmdt);
+		cudaFree(dev_extk);
+		cudaFree(dev_const8);
+		cudaFree(dev_betay);
+		cudaFree(dev_x);
+		cudaFree(dev_ds);
+		cudaFree(dev_x0);
+		cudaFree(dev_c);
+		cudaFree(dev_t1);
+		cudaFree(dev_OMEG);
+		cudaFree(dev_omp2y);
+		cudaFree(dev_const5x);
+		cudaFree(dev_const6y);
+		cudaFree(dev_eytk);
+		cudaFree(dev_eyt);
+		cudaFree(dev_eys);
+		cudaFree(dev_vy);
+		cudaFree(dev_inv_c);
+		cudaFree(dev_sine);
+		cudaFree(dev_sine1);
+		cudaFree(dev_i);
+		cudaFree(dev_exi);
+                cudaFree(dev_E0);
     t_cal_efield += ((end.tv_sec - begin.tv_sec) + ((end.tv_usec - begin.tv_usec)/1000000.0));
 }
 
